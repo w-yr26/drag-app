@@ -1,9 +1,14 @@
+import { events } from "@/utils/event";
+
 export function useMenuDrag(data, containerRef) {
   let currentComponent = null;
 
   // 开始拖拽
   const onDragStart = (component) => {
     currentComponent = component;
+    // 派发开始拖动事件
+    events.emit("start");
+    console.log(containerRef.value);
 
     containerRef.value.addEventListener("dragenter", dragenter);
     containerRef.value.addEventListener("dragover", dragover);
@@ -13,6 +18,9 @@ export function useMenuDrag(data, containerRef) {
 
   // 结束拖拽
   const onDragEnd = () => {
+    // 派发结束拖动事件
+    events.emit("end");
+
     containerRef.value.removeEventListener("dragenter", dragenter);
     containerRef.value.removeEventListener("dragover", dragover);
     containerRef.value.removeEventListener("dragleave", dragleave);
@@ -25,7 +33,6 @@ export function useMenuDrag(data, containerRef) {
   };
 
   const dragover = (e) => {
-    console.log("经过画布触发");
     e.preventDefault();
   };
 
@@ -49,7 +56,6 @@ export function useMenuDrag(data, containerRef) {
       ],
     };
     currentComponent = null;
-    console.log("exe");
   };
 
   return {

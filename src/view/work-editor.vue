@@ -1,12 +1,15 @@
 <template>
   <div class="editor">
     <div class="editor-left">
-      <leftMenu
-        @dragstart="onMenuItemDragStart"
-        @onDragEnd="onMenuItemDragEnd"
-      />
+      <leftMenu @dragstart="onMenuItemDragStart" @dragend="onMenuItemDragEnd" />
     </div>
-    <div class="editor-top">菜单栏</div>
+    <div class="editor-top">
+      <div class="btn-container">
+        <div class="btn-tem" v-for="btn in btns" :key="btn.label">
+          <el-button @click="btn.handler">{{ btn.label }}</el-button>
+        </div>
+      </div>
+    </div>
     <div class="editor-right">属性控制栏目</div>
     <div class="editor-container">
       <div class="editor-container-canvas">
@@ -29,8 +32,9 @@
 import { computed, ref } from "vue";
 import blockItem from "./block-item.vue";
 import leftMenu from "./left-menu.vue";
+// import toolBar from "./tool-bar.vue";
 import { cloneDeep } from "lodash";
-import { useMenuDrag } from "./hooks/useMenuDrag";
+import { useMenuDrag } from "../hooks/useMenuDrag";
 const props = defineProps({
   modelValue: Object,
 });
@@ -52,7 +56,7 @@ const containerStyle = computed(() => {
   };
 });
 
-const containerRef = ref(null);
+const containerRef = ref();
 
 const { onDragEnd, onDragStart } = useMenuDrag(data, containerRef);
 
@@ -148,6 +152,24 @@ function handleBlockUp() {
   document.removeEventListener("mousemove", handleBlockMove);
   document.removeEventListener("mouseup", handleBlockUp);
 }
+
+// 撤销操作逻辑
+import { unReDoCommand } from "@/bridge/undo-redo-config";
+
+const { commands } = unReDoCommand(data);
+
+const btns = [
+  {
+    label: "撤销",
+    icon: "",
+    handler: () => commands.undo(),
+  },
+  {
+    label: "重做",
+    icon: "",
+    handler: () => commands.redo(),
+  },
+];
 </script>
 
 <style lang="sass" scoped>
@@ -159,7 +181,7 @@ function handleBlockUp() {
   &-right {
     position: absolute;
     width: 270px;
-    background-color: red;
+    background-color: #8bcaac;
     top: 0;
     bottom: 0;
     }
@@ -177,7 +199,7 @@ function handleBlockUp() {
     right: 280px;
     left: 280px;
     height: 80px;
-    background-color: blue;
+    background-color: #9ba0ca;
     }
 
   &-container {
@@ -192,9 +214,22 @@ function handleBlockUp() {
             margin: 20px auto;
             width: 800px;
             height: 800px;
-            background-color: yellow;
+            background-color: #eee;
           }
       }
     }
+}
+
+  .btn-container {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+
+  .btn-tem {
+    margin-right: 10px;
+  }
 }
 </style>

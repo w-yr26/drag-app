@@ -6,7 +6,7 @@
 
 <script setup>
 import { provide, ref } from "vue";
-import workEditor from "./work-editor.vue";
+import workEditor from "./view/work-editor.vue";
 // 获取画布区域的数据
 import data from "./data.json";
 // 获取物料区域的数据，并穿透给子组件
