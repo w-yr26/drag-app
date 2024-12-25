@@ -112,6 +112,18 @@ export function unReDoCommand(data) {
     },
   });
 
+  register({
+    name: "update",
+    pushQueue: true,
+    init() {},
+    execute() {
+      return {
+        redo() {},
+        undo() {},
+      };
+    },
+  });
+
   (() => {
     state.commandArr.forEach(
       (command) => command.init && state.destoryArr.push(command.init())

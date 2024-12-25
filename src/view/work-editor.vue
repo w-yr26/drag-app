@@ -4,11 +4,7 @@
       <leftMenu @dragstart="onMenuItemDragStart" @dragend="onMenuItemDragEnd" />
     </div>
     <div class="editor-top">
-      <div class="btn-container">
-        <div class="btn-tem" v-for="btn in btns" :key="btn.label">
-          <el-button @click="btn.handler">{{ btn.label }}</el-button>
-        </div>
-      </div>
+      <toolBar :btns="btns" />
     </div>
     <div class="editor-right">属性控制栏目</div>
     <div class="editor-container">
@@ -32,12 +28,40 @@
 import { computed, ref } from "vue";
 import blockItem from "./block-item.vue";
 import leftMenu from "./left-menu.vue";
-// import toolBar from "./tool-bar.vue";
+import toolBar from "./tool-bar.vue";
 import { cloneDeep } from "lodash";
 import { useMenuDrag } from "../hooks/useMenuDrag";
+// 指令操作逻辑
+import { unReDoCommand } from "@/bridge/instruction-config";
+import { events } from "@/utils/event";
+
 const props = defineProps({
   modelValue: Object,
 });
+
+// 指令操作蓝
+const btns = [
+  {
+    label: "撤销",
+    icon: "",
+    handler: () => commands.undo(),
+  },
+  {
+    label: "重做",
+    icon: "",
+    handler: () => commands.redo(),
+  },
+  {
+    label: "导入",
+    icon: "",
+    handler: () => console.log("导入"),
+  },
+  {
+    label: "导出",
+    icon: "",
+    handler: () => console.log(JSON.stringify(data.value)),
+  },
+];
 
 const emits = defineEmits(["update:modelValue"]);
 const data = computed({
@@ -48,6 +72,8 @@ const data = computed({
     emits("update:modelValue", cloneDeep(newValue));
   },
 });
+
+const { commands } = unReDoCommand(data);
 
 const containerStyle = computed(() => {
   return {
@@ -156,25 +182,6 @@ function handleBlockUp() {
   document.removeEventListener("mousemove", handleBlockMove);
   document.removeEventListener("mouseup", handleBlockUp);
 }
-
-// 撤销操作逻辑
-import { unReDoCommand } from "@/bridge/undo-redo-config";
-import { events } from "@/utils/event";
-
-const { commands } = unReDoCommand(data);
-
-const btns = [
-  {
-    label: "撤销",
-    icon: "",
-    handler: () => commands.undo(),
-  },
-  {
-    label: "重做",
-    icon: "",
-    handler: () => commands.redo(),
-  },
-];
 </script>
 
 <style lang="sass" scoped>
