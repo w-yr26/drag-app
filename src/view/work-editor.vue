@@ -134,6 +134,8 @@ const handleMove = (e) => {
     startPos: focusData.value.focus.map(({ top, left }) => ({ left, top })),
   };
 
+  events.emit("start");
+
   document.addEventListener("mousemove", handleBlockMove);
   document.addEventListener("mouseup", handleBlockUp);
 };
@@ -149,12 +151,15 @@ function handleBlockMove(e) {
 }
 
 function handleBlockUp() {
+  events.emit("end");
+
   document.removeEventListener("mousemove", handleBlockMove);
   document.removeEventListener("mouseup", handleBlockUp);
 }
 
 // 撤销操作逻辑
 import { unReDoCommand } from "@/bridge/undo-redo-config";
+import { events } from "@/utils/event";
 
 const { commands } = unReDoCommand(data);
 
