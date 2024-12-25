@@ -27,7 +27,7 @@ export function unReDoCommand(data) {
           state.queue = queue.slice(0, current + 1);
         }
         // 当前组件的添加指令入队 -> 添加操作的undo、redo分别记录了改变前、改变后的视图数据
-        queue.push({ redo, undo });
+        state.queue.push({ redo, undo });
         // 指针前进
         state.current = current + 1;
       }
@@ -96,9 +96,6 @@ export function unReDoCommand(data) {
       return {
         // 重做 -> 拿到相对较新的东西(默认一松手就执行)
         redo() {
-          console.log("end:data.value", data.value);
-          console.log("end:last", last);
-
           data.value = {
             ...data.value,
             blocks: last,
