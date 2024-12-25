@@ -214,8 +214,6 @@ export function unReDoCommand(data) {
 //             ...data.value,
 //             blocks: prev,
 //           };
-//           // 指针--
-//           state.current--;
 //         },
 //         redo() {
 //           data.value = {
@@ -239,3 +237,19 @@ export function unReDoCommand(data) {
 
 //   return state;
 // }
+
+/**
+ * 实现思路：
+ * 1. 注册对应的指令：撤销、重做、拖拽
+ * 2. 在拖拽指令中，只需要保存上一步、下一步的视图情况(当前指令指针并不是在这里进行更改)
+ *    1. 在拖拽指令中，需要进行初始化，监听“start”和“end”事件
+ *    2. 由于在拖拽开始、拖拽结束的时候，我们已经执行EventBus.emit("start")\EventBus.emit("end")，所以每一个拖拽操作都会触发这里的逻辑
+ *    3. 在每一次的拖拽操作中，都会记录视图数据前后的状态，并保存到queue[redo,undo]中(注意，此处的redo、undo指代可获取新视图、旧视图的方法)
+ * 3. 执行撤销操作时，从queue[]中取出上一步的undo并执行，获取上一步的视图
+ * 4. 执行重做操作时，从queue[]中取出下一步的redo并执行，获取下一步的视图
+ *
+ * 其他说明：
+ * 1. 注册指令的执行时机：当我们引入 unReDoCommand 的时候，整个函数执行，里面的 register({}) 也就被执行
+ *    1. 其中就包含了 drag 类型的执行，又由于 drag 类型的指令具有 init，所以 init 被执行
+ *    2. init 内部又监听 start 和 end，当拖拽结束，触发 end 的回调，返回去执行 state.commands.drag();
+ */
