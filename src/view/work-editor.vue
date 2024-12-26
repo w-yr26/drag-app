@@ -22,6 +22,24 @@
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="dialogVisible" title="导入" width="500">
+    <div>
+      <el-input
+        v-model="importData"
+        style="width: 100%"
+        :rows="2"
+        type="textarea"
+        placeholder="Please input"
+      />
+    </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="initImport">取消</el-button>
+        <el-button type="primary" @click="handleConfirm"> 确认 </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
@@ -32,7 +50,7 @@ import toolBar from "./tool-bar.vue";
 import { cloneDeep } from "lodash";
 import { useMenuDrag } from "../hooks/useMenuDrag";
 // 指令操作逻辑
-import { unReDoCommand } from "@/bridge/instruction-config";
+import { operateCommand } from "@/bridge/instruction-config";
 import { events } from "@/utils/event";
 
 const props = defineProps({
@@ -54,12 +72,12 @@ const btns = [
   {
     label: "导入",
     icon: "",
-    handler: () => console.log("导入"),
+    handler: () => (dialogVisible.value = true),
   },
   {
     label: "导出",
     icon: "",
-    handler: () => console.log(JSON.stringify(data.value)),
+    handler: () => handleExpose(),
   },
 ];
 
@@ -73,7 +91,7 @@ const data = computed({
   },
 });
 
-const { commands } = unReDoCommand(data);
+const { commands } = operateCommand(data);
 
 const containerStyle = computed(() => {
   return {
@@ -182,6 +200,28 @@ function handleBlockUp() {
   document.removeEventListener("mousemove", handleBlockMove);
   document.removeEventListener("mouseup", handleBlockUp);
 }
+
+const dialogVisible = ref(false);
+const importData = ref("");
+
+// 导出的时候显示当前画布的JSON数据
+const handleExpose = () => {
+  dialogVisible.value = true;
+  importData.value = JSON.stringify(data.value);
+};
+
+// 导入的时候，要保留当前快照，用于后续撤回重做
+const handleConfirm = () => {
+  data.value = JSON.parse(importData.value);
+  commands.expose(JSON.parse(importData.value));
+
+  initImport();
+};
+
+const initImport = () => {
+  dialogVisible.value = false;
+  importData.value = "";
+};
 </script>
 
 <style lang="sass" scoped>

@@ -3,7 +3,7 @@ import { ElMessage } from "element-plus";
 import { cloneDeep } from "lodash";
 import { onUnmounted } from "vue";
 
-export function unReDoCommand(data) {
+export function operateCommand(data) {
   const state = {
     current: -1,
     queue: [], // 存放操作过程中涉及到的“操作指令”
@@ -15,8 +15,8 @@ export function unReDoCommand(data) {
   const register = (command) => {
     state.commandArr.push(command);
 
-    state.commands[command.name] = () => {
-      const { redo, undo } = command.execute();
+    state.commands[command.name] = (...args) => {
+      const { redo, undo } = command.execute(...args);
       redo();
 
       if (command.pushQueue) {
@@ -112,14 +112,20 @@ export function unReDoCommand(data) {
     },
   });
 
+  // 注册“导出”指令
   register({
-    name: "update",
+    name: "expose",
     pushQueue: true,
-    init() {},
-    execute() {
+    execute(newValue) {
+      let prev = data.value;
+      let last = newValue;
       return {
-        redo() {},
-        undo() {},
+        redo() {
+          data.value = last;
+        },
+        undo() {
+          data.value = prev;
+        },
       };
     },
   });
@@ -138,7 +144,7 @@ export function unReDoCommand(data) {
   return state;
 }
 
-// export function unReDoCommand(data) {
+// export function operateCommand(data) {
 //   const state = {
 //     current: -1,
 //     queue: [], // 操作过程中涉及的指令
