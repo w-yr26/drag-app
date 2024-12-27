@@ -208,6 +208,41 @@ export function operateCommand(data) {
     },
   });
 
+  // 删除
+  register({
+    name: "delete",
+    pushQueue: true,
+    execute(focusData) {
+      const { focus, unFocus } = focusData.value;
+      console.log(focus.length);
+
+      const prev = cloneDeep(data.value.blocks);
+      const last = (() => {
+        if (focus.length === 0) {
+          ElMessage.error("请选中删除的元素");
+        } else {
+          // 直接更新为未选中的元素
+          data.value.blocks = unFocus;
+        }
+        return data.value.blocks;
+      })();
+      return {
+        redo() {
+          data.value = {
+            ...data.value,
+            blocks: last,
+          };
+        },
+        undo() {
+          data.value = {
+            ...data.value,
+            blocks: prev,
+          };
+        },
+      };
+    },
+  });
+
   (() => {
     state.commandArr.forEach(
       (command) => command.init && state.destoryArr.push(command.init())

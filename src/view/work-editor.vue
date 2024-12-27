@@ -89,6 +89,11 @@ const btns = [
     icon: "",
     handler: () => handleToTop(),
   },
+  {
+    label: "删除",
+    icon: "",
+    handler: () => handleDel(),
+  },
 ];
 
 const emits = defineEmits(["update:modelValue"]);
@@ -241,6 +246,11 @@ const handleToTop = () => {
 // 置底操作
 const handleToBottom = () => {
   commands.pinToBottom(focusData);
+};
+
+// 删除操作
+const handleDel = () => {
+  commands.delete(focusData);
 };
 </script>
 
