@@ -79,6 +79,16 @@ const btns = [
     icon: "",
     handler: () => handleExpose(),
   },
+  {
+    label: "置底",
+    icon: "",
+    handler: () => handleToBottom(),
+  },
+  {
+    label: "置顶",
+    icon: "",
+    handler: () => handleToTop(),
+  },
 ];
 
 const emits = defineEmits(["update:modelValue"]);
@@ -221,6 +231,16 @@ const handleConfirm = () => {
 const initImport = () => {
   dialogVisible.value = false;
   importData.value = "";
+};
+
+// 置顶操作
+const handleToTop = () => {
+  commands.pinToTop(focusData);
+};
+
+// 置底操作
+const handleToBottom = () => {
+  commands.pinToBottom(focusData);
 };
 </script>
 

@@ -20,7 +20,7 @@ const blockStyle = computed(() => {
   return {
     top: `${props.block.top}px`,
     left: `${props.block.left}px`,
-    zIndex: `${props.block.zIndex}px`,
+    zIndex: `${props.block.zIndex}`,
   };
 });
 

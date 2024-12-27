@@ -130,6 +130,80 @@ export function operateCommand(data) {
     },
   });
 
+  // 注册“置顶”指令
+  register({
+    name: "pinToTop",
+    pushQueue: true,
+    execute(focusData) {
+      const { focus, unFocus } = focusData.value;
+
+      let prev = cloneDeep(data.value.blocks);
+      let last = (() => {
+        let max = -Infinity;
+        unFocus.forEach((item) => {
+          max = Math.max(max, item.zIndex);
+        });
+        focus.forEach((item) => {
+          item.zIndex = max + 1;
+        });
+
+        return data.value.blocks;
+      })();
+
+      return {
+        redo() {
+          console.log("exe");
+
+          data.value = {
+            ...data.value,
+            blocks: last,
+          };
+        },
+        undo() {
+          data.value = {
+            ...data.value,
+            blocks: prev,
+          };
+        },
+      };
+    },
+  });
+
+  // 注册“置底”指令
+  register({
+    name: "pinToBottom",
+    pushQueue: true,
+    execute(focusData) {
+      const prev = cloneDeep(data.value.blocks);
+      const last = (() => {
+        const { focus, unFocus } = focusData.value;
+        let min = Infinity;
+        unFocus.forEach((item) => {
+          min = Math.min(min, item.zIndex);
+        });
+        focus.forEach((item) => {
+          item.zIndex = min - 1;
+        });
+        return data.value.blocks;
+      })();
+
+      return {
+        redo() {
+          data.value = {
+            ...data.value,
+            blocks: last,
+          };
+        },
+        undo() {
+          data.value = {
+            ...data.value,
+            blocks: prev,
+          };
+        },
+      };
+    },
+  });
+
   (() => {
     state.commandArr.forEach(
       (command) => command.init && state.destoryArr.push(command.init())
