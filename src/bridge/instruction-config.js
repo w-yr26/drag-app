@@ -181,9 +181,13 @@ export function operateCommand(data) {
         unFocus.forEach((item) => {
           min = Math.min(min, item.zIndex);
         });
+        // 可能一上来就选中所有元素，然后“置底”，此时不能直接减一(如果直接-1会变成负无穷)
+        // 但是画布 zIndex = 0，存在层级小于画布的情况
+        min = Math.min(min, 0);
         focus.forEach((item) => {
-          item.zIndex = min - 1;
+          item.zIndex = min - 1 < 0 ? 0 : min - 1;
         });
+
         return data.value.blocks;
       })();
 
