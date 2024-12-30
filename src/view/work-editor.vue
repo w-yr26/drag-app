@@ -57,7 +57,8 @@ const props = defineProps({
   modelValue: Object,
 });
 
-// 指令操作蓝
+const isPreview = ref(false);
+// 指令操作栏
 const btns = [
   {
     label: "撤销",
@@ -93,6 +94,11 @@ const btns = [
     label: "删除",
     icon: "",
     handler: () => handleDel(),
+  },
+  {
+    label: () => (isPreview.value ? "编辑" : "预览"),
+    icon: "",
+    handler: () => handlePreview(),
   },
 ];
 
@@ -131,6 +137,7 @@ const onMenuItemDragEnd = () => {
 
 // 选中元素
 const handleMouseDown = (e, block) => {
+  if (isPreview.value) return;
   // 阻止默认事件
   e.preventDefault();
   e.stopPropagation();
@@ -162,6 +169,7 @@ const clearActiveBlock = () => {
 
 // 点击整个画布区域 -> 清空所有选中状态
 const handleContainerClick = () => {
+  if (isPreview.value) return;
   clearActiveBlock();
 };
 
@@ -251,6 +259,13 @@ const handleToBottom = () => {
 // 删除操作
 const handleDel = () => {
   commands.delete(focusData);
+};
+
+// 编辑/预览操作
+const handlePreview = () => {
+  // 从 编辑 -> 预览时，要先清空已选中的元素
+  if (!isPreview.value) clearActiveBlock();
+  isPreview.value = !isPreview.value;
 };
 </script>
 

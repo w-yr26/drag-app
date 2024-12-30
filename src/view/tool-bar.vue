@@ -1,7 +1,9 @@
 <template>
   <div class="btn-container">
     <div class="btn-tem" v-for="btn in props.btns" :key="btn.label">
-      <el-button @click="btn.handler">{{ btn.label }}</el-button>
+      <el-button @click="btn.handler">{{
+        typeof btn.label === "function" ? btn.label() : btn.label
+      }}</el-button>
     </div>
   </div>
 </template>
