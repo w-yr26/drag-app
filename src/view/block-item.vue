@@ -2,7 +2,7 @@
   <div
     :style="blockStyle"
     class="block-item"
-    :class="props.block.focus && 'active-block'"
+    :class="[props.block.focus && 'active-block', props.isPreview && 'editing']"
     @mousedown="(e) => onMouseDown(e, props.block)"
   >
     <component :is="getComponent(props.block.key)"></component>
@@ -14,6 +14,7 @@ import { computed, inject } from "vue";
 
 const props = defineProps({
   block: Object,
+  isPreview: Boolean,
 });
 
 const blockStyle = computed(() => {
@@ -57,6 +58,12 @@ const onMouseDown = (e, block) => {
 .active-block {
   &::after {
     border: 3px dashed red;
+  }
+}
+
+.editing {
+  &::after {
+    display: none;
   }
 }
 </style>

@@ -16,7 +16,11 @@
           @mousedown="handleContainerClick"
         >
           <div v-for="(block, index) in data.blocks" :key="index">
-            <blockItem :block="block" @mouseDown="handleMouseDown"></blockItem>
+            <blockItem
+              :block="block"
+              :isPreview="isPreview"
+              @mouseDown="handleMouseDown"
+            ></blockItem>
           </div>
         </div>
       </div>
