@@ -263,17 +263,19 @@ const handleDel = () => {
   &-right {
     position: absolute;
     width: 270px;
-    background-color: #8bcaac;
+    background-color: #fff;
     top: 0;
     bottom: 0;
     }
 
   &-left {
       left: 0;
+      border-right: 1px solid #ededed;
     }
 
   &-right {
     right: 0;
+      border-left: 1px solid #ededed;
     }
 
   &-top {
@@ -281,7 +283,7 @@ const handleDel = () => {
     right: 280px;
     left: 280px;
     height: 80px;
-    background-color: #9ba0ca;
+    background-color: #fff;
     }
 
   &-container {
@@ -296,7 +298,7 @@ const handleDel = () => {
             margin: 20px auto;
             width: 800px;
             height: 800px;
-            background-color: #eee;
+            background-color: #f1f2f5;
           }
       }
     }
