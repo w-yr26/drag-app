@@ -91,7 +91,7 @@ watch(
       console.log("当前可设置的属性", curAttribute.value);
     } else {
       // 没有选中元素
-      state.editData = props.data.container;
+      state.editData = { ...props.data.container };
     }
 
     // 考虑到属性都是以键值对的形式存在，所以使用浅拷贝
@@ -105,12 +105,13 @@ watch(
 const emits = defineEmits(["setAttribute"]);
 
 const submitAttribute = () => {
-  emits("setAttribute", state.editData);
+  emits("setAttribute", { ...state.editData });
 };
 
 // 重置用户选择
 const resetAttribute = () => {
   state.editData = state.resetDate;
+  emits("setAttribute", { ...state.editData });
 };
 </script>
 

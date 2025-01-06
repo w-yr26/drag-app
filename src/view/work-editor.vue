@@ -288,12 +288,15 @@ const handlePreview = () => {
 
 // 更新用户设置的属性
 const updateAttribute = (newAttribute) => {
-  console.log("newAttribute", newAttribute);
-  data.value.blocks.forEach((item) => {
-    if (item.focus) {
-      item.props = newAttribute;
-    }
-  });
+  if (!currentNode.value) {
+    data.value.container = newAttribute;
+  } else {
+    data.value.blocks.forEach((item) => {
+      if (item.focus) {
+        item.props = newAttribute;
+      }
+    });
+  }
 };
 </script>
 
