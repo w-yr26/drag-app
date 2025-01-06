@@ -50,8 +50,9 @@ registerConfig.register({
     ]),
     color: createColorProps("颜色"),
     lineHeight: createSelectProps("字体行高", [
-      { label: "1x", value: 1, key: 1 },
+      { label: "1.2x", value: 1.2, key: 1.2 },
       { label: "1.5x", value: 1.5, key: 1.5 },
+      { label: "1.8x", value: 1.8, key: 1.8 },
       { label: "2x", value: 2, key: 2 },
     ]),
   },

@@ -24,6 +24,7 @@ const blockStyle = computed(() => {
     zIndex: `${props.block.zIndex}`,
     color: props.block.props.color,
     fontSize: props.block.props.size,
+    lineHeight: props.block.props.lineHeight,
   };
 });
 

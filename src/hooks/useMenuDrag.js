@@ -73,7 +73,7 @@ function getCurDefaultProps(key) {
         text: "默认文本内容",
         color: "#409EFF",
         size: "12px",
-        lineHeight: 1,
+        lineHeight: 1.8,
       };
       break;
     case "button":
