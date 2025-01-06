@@ -46,7 +46,7 @@ registerConfig.register({
     size: createSelectProps("字体大小", [
       { label: "默认", value: "14px", key: "14px" },
       { label: "小号字体", value: "12px", key: "12px" },
-      { label: "大号字体", value: "16px", key: "16px" },
+      { label: "大号字体", value: "18px", key: "18px" },
     ]),
     color: createColorProps("颜色"),
     lineHeight: createSelectProps("字体行高", [

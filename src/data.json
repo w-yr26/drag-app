@@ -12,7 +12,7 @@
       "focus": false,
       "props": {
         "text": "这是文本内容",
-        "size": "18px",
+        "size": "14px",
         "color": "#e75c6a",
         "lineHeight": 1.8
       }
