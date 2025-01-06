@@ -6,7 +6,9 @@
     <div class="editor-top">
       <toolBar :btns="btns" />
     </div>
-    <div class="editor-right">属性控制栏目</div>
+    <div class="editor-right">
+      <right-pane :data="data" :currentNode="currentNode" />
+    </div>
     <div class="editor-container">
       <div class="editor-container-canvas">
         <div
@@ -51,6 +53,7 @@ import { computed, ref } from "vue";
 import blockItem from "./block-item.vue";
 import leftMenu from "./left-menu.vue";
 import toolBar from "./tool-bar.vue";
+import rightPane from "./right-pane.vue";
 import { cloneDeep } from "lodash";
 import { useMenuDrag } from "../hooks/useMenuDrag";
 // 指令操作逻辑
@@ -139,6 +142,9 @@ const onMenuItemDragEnd = () => {
   onDragEnd();
 };
 
+// 当前选中元素
+const currentNode = ref();
+
 // 选中元素
 const handleMouseDown = (e, block) => {
   if (isPreview.value) return;
@@ -159,6 +165,7 @@ const handleMouseDown = (e, block) => {
       // 清空其他元素的active状态
       clearActiveBlock();
       block.focus = true;
+      currentNode.value = block;
     }
   }
 
@@ -175,6 +182,7 @@ const clearActiveBlock = () => {
 const handleContainerClick = () => {
   if (isPreview.value) return;
   clearActiveBlock();
+  currentNode.value = null;
 };
 
 // 当前选中的元素 & 未选中的元素
