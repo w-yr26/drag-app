@@ -7,7 +7,12 @@
       <toolBar :btns="btns" />
     </div>
     <div class="editor-right">
-      <right-pane :data="data" :currentNode="currentNode" />
+      <right-pane
+        :data="data"
+        :currentNode="currentNode"
+        :focusData="focusData.focus"
+        @setAttribute="updateAttribute"
+      />
     </div>
     <div class="editor-container">
       <div class="editor-container-canvas">
@@ -159,6 +164,7 @@ const handleMouseDown = (e, block) => {
     } else {
       block.focus = !block.focus;
     }
+    currentNode.value = block;
   } else {
     // 如果自身不是选中的，则选中状态为true；如果已经是选中了，再点击自身，则不做处理
     if (!block.focus) {
@@ -278,6 +284,16 @@ const handlePreview = () => {
   // 从 编辑 -> 预览时，要先清空已选中的元素
   if (!isPreview.value) clearActiveBlock();
   isPreview.value = !isPreview.value;
+};
+
+// 更新用户设置的属性
+const updateAttribute = (newAttribute) => {
+  console.log("newAttribute", newAttribute);
+  data.value.blocks.forEach((item) => {
+    if (item.focus) {
+      item.props = newAttribute;
+    }
+  });
 };
 </script>
 
