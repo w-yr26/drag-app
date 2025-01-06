@@ -22,13 +22,17 @@ const blockStyle = computed(() => {
     top: `${props.block.top}px`,
     left: `${props.block.left}px`,
     zIndex: `${props.block.zIndex}`,
+    color: props.block.props.color,
+    fontSize: props.block.props.size,
   };
 });
+
+console.log("props.block.props", props.block.props);
 
 const { componentMap } = inject("config");
 
 const getComponent = (key) => {
-  return componentMap[key].render();
+  return componentMap[key].render({ props: props.block.props });
 };
 
 const emits = defineEmits(["clearActive", "mouseDown"]);

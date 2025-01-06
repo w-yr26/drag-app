@@ -52,6 +52,7 @@ export function useMenuDrag(data, containerRef) {
           left: e.offsetX,
           zIndex: 1,
           key: currentComponent.key,
+          props: getCurDefaultProps(currentComponent.key),
         },
       ],
     };
@@ -62,4 +63,36 @@ export function useMenuDrag(data, containerRef) {
     onDragStart,
     onDragEnd,
   };
+}
+
+function getCurDefaultProps(key) {
+  let res = undefined;
+  switch (key) {
+    case "text":
+      res = {
+        text: "默认文本内容",
+        color: "#409EFF",
+        size: "12px",
+        lineHeight: 1,
+      };
+      break;
+    case "button":
+      res = {
+        text: "默认按钮文案",
+        type: "warning",
+        size: "large",
+      };
+      break;
+    case "input":
+      {
+        res = {
+          text: "默认文本内容",
+        };
+      }
+      break;
+    default:
+      break;
+  }
+
+  return res;
 }
