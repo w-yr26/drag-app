@@ -3,12 +3,12 @@
     <h3>属性控制栏目</h3>
     <el-form label-width="auto" label-position="top">
       <div v-if="!currentNode">
-        <el-form-item label="宽度">
+        <collapse-block :title="'宽度'">
           <el-input-number v-model="state.editData.width" />
-        </el-form-item>
-        <el-form-item label="高度">
+        </collapse-block>
+        <collapse-block :title="'高度'">
           <el-input-number v-model="state.editData.height" />
-        </el-form-item>
+        </collapse-block>
       </div>
       <div class="attribute-container" v-else>
         <div
@@ -16,8 +16,7 @@
           v-for="(val, key) in curAttribute"
           :key="key"
         >
-          <span class="label">{{ val.label }}</span>
-          <div class="option">
+          <collapse-block :title="val.label">
             <div class="color-box" v-if="val.type === 'color'">
               <el-color-picker v-model="state.editData[key]" />
             </div>
@@ -43,7 +42,7 @@
                 />
               </el-select>
             </div>
-          </div>
+          </collapse-block>
         </div>
       </div>
     </el-form>
@@ -56,6 +55,7 @@
 
 <script setup>
 import { inject, reactive, ref, watch } from "vue";
+import collapseBlock from "@/components/collapse-block.vue";
 
 const props = defineProps({
   data: Object,
@@ -121,24 +121,15 @@ const resetAttribute = () => {
 }
 
 .attribute-container {
-  background-color: #f1f2f5;
-
   .attribute-item {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
-    .label {
-      font-weight: 500;
-      color: #333;
-      font-size: 15px;
-    }
-
-    .option {
-      margin-top: 5px;
-      padding: 4px;
-    }
   }
+}
+
+.footer {
+  margin-top: 20px;
 }
 </style>
